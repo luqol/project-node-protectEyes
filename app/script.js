@@ -71,7 +71,7 @@ const App = () => {
       </div>
       }
       { status === 'off' && <button onClick={ e => startTimer(e)} className="btn">Start</button>}
-      { status != 'off' && <button onClick={e =>stopTimer(e)} className="btn">Stop</button>}
+      { status != 'off' && <button onClick={e => stopTimer(e)} className="btn">Stop</button>}
       <button onClick={e => closeHandler(e)} className="btn btn-close">X</button>
     </div>
   )
