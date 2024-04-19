@@ -1,20 +1,78 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { render } from 'react-dom';
 
 const App = () => {
+  const [status, setStatus] = useState('off');
+  const [time, setTime] = useState();
+  const [timer, setTimer] = useState(null);
+
+  const formetTime = useMemo( () => {
+    let ss =  time % 60;
+    const mm =  Math.floor(time/60);
+
+    ss = ss < 10 ? `0${ss}` : ss;
+
+    return `${mm} : ${ss}`;
+  }, [time]);
+
+  const startTimer = (e) => {
+    e.preventDefault();
+    setTime(1200);
+    setStatus('work');
+    setTimer(setInterval(() => {
+      setTime(time => time - 1);
+      console.log('time' + time)
+    }, 1000));
+  };
+  
+  const stopTimer = (e) => {
+    e.preventDefault();
+    setStatus('off');
+    clearInterval(timer);
+    setTime(1200);
+  };
+
+  const closeHandler = (e) => {
+    e.preventDefault();
+    window.close();
+  };
+
+  const playBell = () => {
+    const bell = new Audio('./sounds/bell.wav');
+    bell.play();
+  };
+
+  if (time === 0){
+    playBell();
+    if (status === 'work'){
+      setStatus('rest');
+      setTime(20);
+    } else if (status === 'rest'){
+      setStatus('work');
+      setTime(1200);
+    }
+  }
+
   return (
     <div>
       <h1>Protect your eyes</h1>
-      <p>According to optometrists in order to save your eyes, you should follow the 20/20/20. It means you should to rest your eyes every 20 minutes for 20 seconds by looking more than 20 feet away.</p>
-      <p>This app will help you track your time and inform you when it's time to rest.</p>
-      <img src="./images/work.png" />
-      <img src="./images/rest.png" />
-      <div className="timer">
-        18:23
+      {
+        status === 'off' && 
+        <div>
+          <p>According to optometrists in order to save your eyes, you should follow the 20/20/20. It means you should to rest your eyes every 20 minutes for 20 seconds by looking more than 20 feet away.</p>
+          <p>This app will help you track your time and inform you when it's time to rest.</p>
+        </div>
+      }
+      { status === 'work' && <img src="./images/work.png" />}
+      { status === 'rest' && <img src="./images/rest.png" />}
+      { status != 'off' &&
+        <div className="timer">
+        {formetTime}
       </div>
-      <button className="btn">Start</button>
-      <button className="btn">Stop</button>
-      <button className="btn btn-close">X</button>
+      }
+      { status === 'off' && <button onClick={ e => startTimer(e)} className="btn">Start</button>}
+      { status != 'off' && <button onClick={e =>stopTimer(e)} className="btn">Stop</button>}
+      <button onClick={e => closeHandler(e)} className="btn btn-close">X</button>
     </div>
   )
 };
