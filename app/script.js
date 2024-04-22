@@ -17,11 +17,27 @@ const App = () => {
 
   const startTimer = (e) => {
     e.preventDefault();
-    setTime(1200);
+    setTime(3);
     setStatus('work');
     setTimer(setInterval(() => {
-      setTime(time => time - 1);
-      console.log('time' + time)
+      setTime(time => {
+        console.log('time ' + time);
+        if (time === 0){
+          playBell();
+          setStatus( status => {
+            console.log('status ' + status );
+            if (status === 'work'){
+              setTime(20);
+              return 'rest';
+            } else {
+              setTime(3);
+              return 'work';
+            }
+          })
+        }
+        return time - 1
+      });
+      
     }, 1000));
   };
   
@@ -42,7 +58,7 @@ const App = () => {
     bell.play();
   };
 
-  if (time === 0){
+  /*if (time === 0){
     playBell();
     if (status === 'work'){
       setStatus('rest');
@@ -51,7 +67,7 @@ const App = () => {
       setStatus('work');
       setTime(1200);
     }
-  }
+  } */
 
   return (
     <div>
