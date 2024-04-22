@@ -13,14 +13,14 @@ function main() {
     },
     width: 520,
     height: 650,
-    //frame: false,
+    frame: false,
   })
 
   // load app/index.html as the window content
   mainWindow.loadFile(path.join('app', 'index.html'));
 
   // opem dev tools
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 }
 
 app.on('ready', main);
